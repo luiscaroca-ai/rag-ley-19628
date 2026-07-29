@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rag-ley-19628:latest
+    env_file:
+      - .env
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./data:/app/data:ro
+    restart: unless-stopped
+
+  index:
+    image: rag-ley-19628:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data:ro
+    command: ["python", "scripts/index_law.py"]
+    profiles:
+      - tools
+

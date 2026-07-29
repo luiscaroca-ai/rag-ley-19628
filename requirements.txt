@@ -1,0 +1,11 @@
+gradio>=5.0,<7
+langchain-core>=0.3,<2
+langchain-openai>=0.3,<2
+langchain-qdrant>=0.2,<2
+langchain-text-splitters>=0.3,<2
+pandas>=2.2,<3
+pydantic>=2.7,<3
+python-dotenv>=1.0,<2
+pytest>=8.0,<9
+qdrant-client>=1.12,<2
+

@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "RAG Ley 19.628 (Gradio)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal",
+      "env": {"PYTHONPATH": "${workspaceFolder}/src"}
+    },
+    {
+      "name": "Indexar ley en Qdrant",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/index_law.py",
+      "console": "integratedTerminal",
+      "env": {"PYTHONPATH": "${workspaceFolder}/src"}
+    }
+  ]
+}
+
