@@ -114,7 +114,7 @@ flyctl status
 flyctl logs
 ```
 
-La URL configurada es <https://rag-ley-19628-luiscaroca.fly.dev>.
+La URL configurada es <https://rag-ley-19628-grupo1.fly.dev>.
 Se mantiene una sola máquina porque Gradio conserva en memoria el estado de las
 consultas SSE; varias máquinas requieren afinidad de sesión externa.
 
