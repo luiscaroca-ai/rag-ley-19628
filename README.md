@@ -86,11 +86,44 @@ Para detenerla:
 docker compose down
 ```
 
+## Producción en Fly.io
+
+La configuración de producción usa São Paulo (`gru`), HTTPS obligatorio, una
+máquina de 1 GB y la colección independiente `ley_21719_rag_prod`.
+
+Autentica Fly CLI e indexa la colección productiva una vez:
+
+```bash
+flyctl auth login
+docker compose --profile tools run --rm \
+  -e QDRANT_COLLECTION=ley_21719_rag_prod index
+```
+
+Registra las credenciales como secretos de Fly.io, sin agregarlas al repositorio:
+
+```bash
+flyctl secrets set OPENAI_API_KEY="..." QDRANT_URL="..." QDRANT_API_KEY="..."
+```
+
+Despliega y consulta el estado:
+
+```bash
+flyctl deploy
+flyctl scale count 1 --yes
+flyctl status
+flyctl logs
+```
+
+La URL configurada es <https://rag-ley-19628-luiscaroca.fly.dev>.
+Se mantiene una sola máquina porque Gradio conserva en memoria el estado de las
+consultas SSE; varias máquinas requieren afinidad de sesión externa.
+
 ## Estructura
 
 ```text
 Dockerfile                Imagen de ejecución
 compose.yaml              Servicios de aplicación e indexación
+fly.toml                  Configuración productiva de Fly.io
 app.py                    Interfaz Gradio
 scripts/index_law.py      Indexación de la ley en Qdrant
 src/rag_ley/chunking.py   División estructural por artículo
