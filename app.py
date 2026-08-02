@@ -58,6 +58,11 @@ BRAND_CSS = """
 .answer-panel { min-height: 305px; padding: 10px 14px !important; background: #fbfcfd !important; }
 .answer-panel h1, .answer-panel h2, .answer-panel h3 { color: var(--navy) !important; }
 .answer-panel blockquote { border-left-color: var(--gold) !important; background: #f7f3eb !important; }
+.processing-status {
+  min-height: 28px; margin: 2px 0 8px !important; color: var(--navy) !important;
+  font-size: 13px !important; font-weight: 700 !important;
+}
+.processing-status p { margin: 0 !important; }
 .primary-action { border: 0 !important; border-radius: 10px !important; background: linear-gradient(135deg, #142c4b, #1c416c) !important; color: white !important; font-weight: 700 !important; box-shadow: 0 8px 18px rgba(20,44,75,.18) !important; }
 .primary-action:hover { transform: translateY(-1px); box-shadow: 0 11px 24px rgba(20,44,75,.24) !important; }
 .secondary-action { border-radius: 10px !important; border-color: #cfd5dd !important; color: var(--navy) !important; }
@@ -133,6 +138,7 @@ with gr.Blocks(
 
             with gr.Column(scale=7, elem_classes="premium-card"):
                 gr.HTML('<div class="section-kicker">Análisis documental</div><div class="section-title">Respuesta fundamentada</div>')
+                processing_status = gr.Markdown("", elem_classes="processing-status")
                 answer = gr.Markdown(
                     value="_La respuesta aparecerá aquí después de realizar una consulta._",
                     elem_classes="answer-panel",
@@ -147,11 +153,30 @@ with gr.Blocks(
             """
         )
 
-    submit.click(answer_question, inputs=question, outputs=answer, show_progress="minimal")
-    question.submit(answer_question, inputs=question, outputs=answer, show_progress="minimal")
+    submit.click(
+        lambda: "Procesando la consulta",
+        outputs=processing_status,
+        queue=False,
+    ).then(
+        answer_question,
+        inputs=question,
+        outputs=answer,
+        show_progress="minimal",
+    ).then(lambda: "", outputs=processing_status, queue=False)
+
+    question.submit(
+        lambda: "Procesando la consulta",
+        outputs=processing_status,
+        queue=False,
+    ).then(
+        answer_question,
+        inputs=question,
+        outputs=answer,
+        show_progress="minimal",
+    ).then(lambda: "", outputs=processing_status, queue=False)
     clear.click(
-        lambda: ("", "_La respuesta aparecerá aquí después de realizar una consulta._"),
-        outputs=[question, answer],
+        lambda: ("", "", "_La respuesta aparecerá aquí después de realizar una consulta._"),
+        outputs=[question, processing_status, answer],
         queue=False,
     )
 
